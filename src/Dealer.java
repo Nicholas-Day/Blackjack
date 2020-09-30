@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.List;
 
 public class Dealer {
@@ -33,30 +32,24 @@ public class Dealer {
 
     public int getBetFromPlayer(Player player) {
         int bet = 0;
-        try {
-            bet = Game.reader.read();
-            // TODO replace 5 with a minimum bet constant
-            if (bet < 5) bet = 5;
-            if (bet > player.getCurrentBank()) bet = player.getCurrentBank();
-            player.setCurrentBank(player.getCurrentBank() - bet);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        bet = Game.scanner.nextInt();
+        // TODO replace 5 with a minimum bet constant
+        if (bet < 5) bet = 5;
+        if (bet > player.getCurrentBank()) bet = player.getCurrentBank();
+        player.setCurrentBank(player.getCurrentBank() - bet);
+
         return bet;
     }
 
     public int getBetFromPlayer(Player player, int max) {
         int bet = 0;
-        try {
-            bet = Game.reader.read();
-            // TODO replace 5 with a minimum bet constant
-            if (bet < 0) bet = 0;
-            if (bet > max) bet = max;
-            if (bet > player.getCurrentBank()) bet = player.getCurrentBank();
-            player.setCurrentBank(player.getCurrentBank() - bet);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        bet = Game.scanner.nextInt();
+        // TODO replace 5 with a minimum bet constant
+        if (bet < 0) bet = 0;
+        if (bet > max) bet = max;
+        if (bet > player.getCurrentBank()) bet = player.getCurrentBank();
+        player.setCurrentBank(player.getCurrentBank() - bet);
+
         return bet;
     }
 
@@ -95,21 +88,17 @@ public class Dealer {
             while (choice.equals("bad")) {
                 System.out.println("Dealer is showing an Ace. Would you like to place an insurance side bet?\n" +
                         " 1. Yes\n 2.No");
-                try {
-                    choice = Game.reader.readLine();
-                    switch (choice) {
-                        case "1", "Y", "y", "YES", "Yes", "yes":
-                            System.out.print("You can place an insurance side bet (paid at 2x) of up to $" +
-                                    (currentPlayer.getBet() / 2) + "\nHow much would you like to bet: $");
-                            currentPlayer.setSideBet(getBetFromPlayer(currentPlayer, currentPlayer.getBet() / 2));
-                        case "2", "n", "N", "NO", "No", "no":
-                            break;
-                        default:
-                            choice = "bad";
-                            System.out.println("Please enter a valid option.");
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                choice = Game.scanner.nextLine();
+                switch (choice) {
+                    case "1", "Y", "y", "YES", "Yes", "yes":
+                        System.out.print("You can place an insurance side bet (paid at 2x) of up to $" +
+                                (currentPlayer.getBet() / 2) + "\nHow much would you like to bet: $");
+                        currentPlayer.setSideBet(getBetFromPlayer(currentPlayer, currentPlayer.getBet() / 2));
+                    case "2", "n", "N", "NO", "No", "no":
+                        break;
+                    default:
+                        choice = "bad";
+                        System.out.println("Please enter a valid option.");
                 }
             }
 

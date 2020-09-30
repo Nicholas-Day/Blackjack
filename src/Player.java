@@ -67,6 +67,7 @@ public class Player {
         newHand.addCardToHand(hand.getCards().get(1));
         hand.getCards().remove(1);
         newHand.setBetAmount(bet);
+        currentBank -= bet;
         hands.add(newHand);
         dealer.dealCard(newHand);
         dealer.dealCard(hand);

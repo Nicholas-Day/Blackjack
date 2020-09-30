@@ -1,12 +1,11 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 public class Game {
-    public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    public static Scanner scanner = new Scanner(System.in);
     private List<Player> players;
     private Dealer dealer;
 
@@ -48,11 +47,7 @@ public class Game {
                     displayTurnInfo(currentPlayer, currentHand);
                     System.out.println("Do you want to: \n 1. Hit \n 2. Split Pair \n 3. Double down \n 4. Stand \n 5" +
                             ". Surrender");
-                    try {
-                        choice = Integer.parseInt(Game.reader.readLine());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    choice = scanner.nextInt();
                     switch (choice) {
                         case 1:
                             dealer.dealCard(currentHand);
@@ -231,27 +226,20 @@ public class Game {
         players = new ArrayList<>();
 
         System.out.print("How many players: ");
-        try {
-            dealer.setNumOfPlayers(Integer.parseInt(Game.reader.readLine()));
-            // Get name and buy in for each player
-            for (int i = 0; i < dealer.getNumOfPlayers(); i++) {
-                String name = "newPlayer";
-                String initBank = "0";
-                try {
-                    System.out.print("Enter name for player " + (i + 1) + ": ");
-                    name = Game.reader.readLine();
-                    System.out.print("Buy in: $");
-                    initBank = Game.reader.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Player newPlayer = new Player();
-                newPlayer.setInitialBank(Integer.parseInt(initBank));
-                newPlayer.setName(name);
-                players.add(newPlayer);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        dealer.setNumOfPlayers(scanner.nextInt());
+        // Get name and buy in for each player
+        for (int i = 0; i < dealer.getNumOfPlayers(); i++) {
+            String name;
+            int initBank;
+            System.out.print("Enter name for player " + (i + 1) + ": ");
+            name = scanner.nextLine();
+            System.out.print("Buy in: $");
+            initBank = scanner.nextInt();
+
+            Player newPlayer = new Player();
+            newPlayer.setInitialBank(initBank);
+            newPlayer.setName(name);
+            players.add(newPlayer);
         }
     }
 }
