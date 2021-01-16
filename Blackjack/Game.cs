@@ -63,6 +63,16 @@ namespace Blackjack
             }
         }
 
+        private static void SettleInsuranceBets()
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void OfferInsurance()
+        {
+            throw new NotImplementedException();
+        }
+
         private static void PayoutOnNaturals()
         {
             throw new NotImplementedException();

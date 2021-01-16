@@ -44,6 +44,17 @@ namespace Blackjack.Helpers
             }
             return false;
         }
+
+        internal static object GetTurnDecision()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static void TurnOptions()
+        {
+            throw new NotImplementedException();
+        }
+
         internal static int GetBuyIn(string message)
         {
             Console.Write(message);
