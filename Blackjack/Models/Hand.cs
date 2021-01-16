@@ -10,6 +10,9 @@ namespace Blackjack.Models
         public int Wager { get; set; }
         public int Value { get => GetValue(); }
         public bool HasPlayed { get; set; }
+        public bool HasAce { get => Cards.Any(card => card.Rank.Value == Ranks.Ace); }
+        public bool IsBust { get => IsHandBust();}
+
 
         public Hand()
         {
@@ -24,6 +27,11 @@ namespace Blackjack.Models
         {
             Cards.Add(card);
         }
+        public void Discard()
+        {
+            Deck.DiscardPile.AddRange(Cards);
+            Cards.RemoveAll(x => x.GetType() == typeof(Card));
+        }
         private int GetValue()
         {
             var value = 0;
@@ -31,7 +39,7 @@ namespace Blackjack.Models
             {
                 value = value + card.Value;
             }
-            if (value > 21 && HasAce())
+            if (value > 21 && HasAce)
             {
                 var adjustedValue = value - ( 10 * (NumOfAces() - 1) ) > 21 ? value - (10 * NumOfAces())  : value - (10 * (NumOfAces() - 1));
                 return adjustedValue;
@@ -50,9 +58,13 @@ namespace Blackjack.Models
             }
             return count;
         }
-        private bool HasAce()
+        private bool IsHandBust()
         {
-            return Cards.Any(x => x.Rank.Value == Ranks.Ace);
+            if (Value > 21)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

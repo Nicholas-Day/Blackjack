@@ -1,6 +1,5 @@
 ﻿using Blackjack.Helpers;
 using Blackjack.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,11 +10,6 @@ namespace Blackjack
         public static List<Participant> Participants { get; private set; } = new List<Participant>();
         public static List<Player> Players { get; private set; } = new List<Player>();
 
-        internal static void CloseOutPlayer(Player player)
-        {
-            // return players remianing bankroll
-            Game.Players.Remove(player);
-        }
 
         public static Dealer Dealer { get; private set; } = new Dealer();
 
@@ -31,17 +25,21 @@ namespace Blackjack
                 AskPlayersForAnotherRound();
             }
         }
-        private static void AskPlayersForAnotherRound()
-        {
-            var playersWithNoMoney = Players.Where(player => player.Bank.Balance == 0);
-            foreach (var player in Players)
-            {
-                Display.AskToPlayAgain(player);
-            }
-        }
         private static bool GameHasPlayers()
         {
             return Players.Any();
+        }
+        private static void AskPlayersForAnotherRound()
+        {
+            foreach (var player in Players)
+            {
+                PlayerIO.AskToPlayAgain(player);
+            }
+        }
+        internal static void CloseOutPlayer(Player player)
+        {
+            // TODO: return players remianing bankroll
+            Game.Players.Remove(player);
         }
 
         private static void PlayRound()
@@ -60,34 +58,57 @@ namespace Blackjack
             else
             {
                 Players.ForEach(player => player.TakeTurn());
+                Dealer.TakeTurn();
+                Dealer.SettleBets();
             }
+            Participants.ForEach(participant => participant.Discard());
         }
-
-        private static void SettleInsuranceBets()
-        {
-            throw new NotImplementedException();
-        }
-
         private static void OfferInsurance()
         {
-            throw new NotImplementedException();
+            foreach (var player in Players)
+            {
+                var wantsInsurance = PlayerIO.GetInsuranceResponse();
+                if (wantsInsurance)
+                {
+                    player.PlaceInsuranceBet();
+                }
+            }
         }
-
-        private static void PayoutOnNaturals()
+        private static void SettleInsuranceBets()
         {
-            throw new NotImplementedException();
+            foreach (var player in Players.Where(player => player.HasInsuranceBet))
+            {
+                if (Dealer.HasNatural)
+                {
+                    Dealer.PayoutInsurance(player);
+                }
+                else
+                {
+                    Dealer.CollectInsurance(player);
+                }
+            }
         }
-
         private static bool ParticipantHasNatural()
         {
             foreach (var participant in Participants)
             {
-                if (participant.HasNatural())
+                if (participant.HasNatural)
                 {
                     return true;
                 }
             }
             return false;
+        }
+        private static void PayoutOnNaturals()
+        {
+            if (Dealer.HasNatural)
+            {
+                Dealer.SettleInCaseOfDealerNatural();
+            }
+            else
+            {
+                Dealer.SettleBets();
+            }
         }
 
         public static void InitializeParticipants()
@@ -100,7 +121,6 @@ namespace Blackjack
         {
             for (int i = 0; i < playerCount; i++)
             {
-                Console.Clear();
                 var name = GetPlayerName(i);
                 var bankroll = GetPlayerBankroll(name);
                 Players.Add(new Player(name, bankroll));
@@ -109,19 +129,15 @@ namespace Blackjack
         }
         private static int GetNumberOfPlayers()
         {
-            Console.Write("Enter number of players: ");
-            var playerCount = Int32.Parse(Console.ReadLine());
-            return playerCount;
+            return PlayerIO.NumberOfPlayers();
         }
         private static string GetPlayerName(int i)
         {
-            Console.Write($"Enter name for player {i + 1}: ");
-            var name = Console.ReadLine();
-            return name;
+            return PlayerIO.PlayerName(i);
         }
         private static int GetPlayerBankroll(string name)
         {
-            var bankroll = Display.GetBuyIn($"Enter {name}'s starting bankroll: ");
+            var bankroll = PlayerIO.GetBuyIn($"Enter {name}'s starting bankroll: ");
             return bankroll;
         }
 
@@ -133,10 +149,7 @@ namespace Blackjack
         }
         private static int GetHouseBank()
         {
-            Console.Clear();
-            Console.Write("Enter house bankroll: ");
-            var bankroll = Console.Read();
-            return bankroll;
+            return PlayerIO.HouseBank();
         }
     }
 }

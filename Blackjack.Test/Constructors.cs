@@ -1,4 +1,6 @@
-﻿using Blackjack.Exceptions;
+﻿using Blackjack.Enums;
+using Blackjack.Exceptions;
+using Blackjack.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;

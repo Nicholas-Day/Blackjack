@@ -1,17 +1,24 @@
-﻿namespace Blackjack.Enums
+﻿using System.Collections.Generic;
+
+namespace Blackjack.Enums
 {
     public class TurnOptions : Enumeration
     {
         public readonly bool IsExclusiveToNewHands;
+        public static List<TurnOptions> AllOptions { get => GetAllOptions();}
 
         public static TurnOptions Hit = new TurnOptions(1, "Hit", false);
         public static TurnOptions Stand = new TurnOptions(2, "Stand", false);
-        public static TurnOptions Split = new TurnOptions(3, "Split", true);
-        public static TurnOptions DoubleDown = new TurnOptions(4, "Double down", true);
-        public static TurnOptions Insurance = new TurnOptions(5, "Insurance", true);
-        public static TurnOptions Surrender = new TurnOptions(6, "Surrender", false);
+        public static TurnOptions Surrender = new TurnOptions(3, "Surrender", false);
+        public static TurnOptions Split = new TurnOptions(4, "Split", true);
+        public static TurnOptions DoubleDown = new TurnOptions(5, "Double down", true);
 
         public TurnOptions() { }
         private TurnOptions(int value, string displayName, bool isExclusiveToInitialHand) : base(value, displayName) { IsExclusiveToNewHands = isExclusiveToInitialHand; }
+
+        private static List<TurnOptions> GetAllOptions()
+        {
+            return new List<TurnOptions>() { Hit, Stand, Surrender, Split, DoubleDown };
+        }
     }
 }

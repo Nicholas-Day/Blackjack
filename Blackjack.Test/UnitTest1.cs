@@ -1,5 +1,6 @@
 using Blackjack.Enums;
 using Blackjack.Exceptions;
+using Blackjack.Helpers;
 using Blackjack.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -165,6 +166,15 @@ namespace Blackjack.Test
         {
             
             Game.InitializeParticipants();
+        }
+        [TestMethod]
+        public void DiscardHand()
+        {
+            var hand = new Hand() { Cards = CardFactory.Generate2CardHand() };
+
+            hand.Discard();
+
+            Assert.AreEqual(0, hand.Cards.Count);
         }
     }
 }

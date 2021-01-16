@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Blackjack.Enums;
+using Blackjack.Helpers;
+using System.Collections.Generic;
 
 namespace Blackjack.Models
 {
@@ -6,6 +8,7 @@ namespace Blackjack.Models
     {
         public Bank Bank { get; set; }
         public List<Hand> Hands { get; set; }
+        public bool HasNatural { get => CheckForNatural();}
 
         public void DrawCard()
         {
@@ -19,14 +22,34 @@ namespace Blackjack.Models
         {
             hand.AddCard(Deck.Next());
         }
-
-        internal bool HasNatural()
+        internal void Discard()
+        {
+            foreach (var hand in Hands)
+            {
+                hand.Discard();
+            }
+        }
+        private bool CheckForNatural()
         {
             if (Hands[0].Value == 21)
             {
                 return true;
             }
             return false;
+        }
+        public virtual void TakeTurn()
+        {
+            foreach (var hand in Hands)
+            {
+                if (!hand.HasPlayed)
+                {
+                    PlayerIO.TurnOptions();
+                    var decision = PlayerIO.GetTurnDecision();
+                    hand.HasPlayed = true;
+                    Decision.Execute(decision);
+                    if (decision == TurnOptions.Split) { TakeTurn(); }
+                }
+            }
         }
     }
 }

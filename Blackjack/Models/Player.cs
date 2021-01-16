@@ -1,12 +1,12 @@
-﻿using Blackjack.Enums;
-using Blackjack.Helpers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Blackjack.Models
 {
     public class Player : Participant
     {
         public string Name { get; set; }
+        public bool HasInsuranceBet { get => HasInsurance();}
+        public int InsuranceBet { get; private set; }
 
         public Player()
         {
@@ -32,25 +32,25 @@ namespace Blackjack.Models
             Bank = new Bank(amount);
             Hands = new List<Hand>() { new Hand() };
         }
+
+        private bool HasInsurance()
+        {
+            if (InsuranceBet != 0)
+            {
+                return true;
+            }
+            return false;
+        }
         public void PlaceBet(Hand hand, int amount)
         {
             Bank.Withdraw(amount);
             hand.Wager = amount;
         }
-
-        internal void TakeTurn()
+        public void PlaceInsuranceBet()
         {
-            foreach (var hand in Hands)
-            {
-                if (!hand.HasPlayed)
-                {
-                    Display.TurnOptions();
-                    var decision = Display.GetTurnDecision();
-                    hand.HasPlayed = true;
-                    Decision.Execute(decision);
-                    if (decision == TurnOptions.Split) { TakeTurn(); }
-                }
-            }
+            var insuranceBet = Hands[0].Wager / 2;
+            Bank.Withdraw(insuranceBet);
+            InsuranceBet = insuranceBet;
         }
     }
 }

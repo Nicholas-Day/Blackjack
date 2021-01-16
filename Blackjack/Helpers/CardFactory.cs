@@ -26,7 +26,7 @@ namespace Blackjack.Helpers
             var card2 = CardFactory.GenerateCard();
             return new List<Card>() { card1, card2 };
         }
-        private static Card GenerateCard()
+        internal static Card GenerateCard()
         {
             var card = new Card(GenerateRankValue(), GenerateSuitValue());
             return card;

@@ -3,9 +3,9 @@ using Blackjack.Helpers;
 
 namespace Blackjack.Models
 {
+    // TODO: replace class with custom enum Suit
     public class Suit
     {
-        // TODO: replace with custom enum Suit
         public Suits Value { get; set; }
 
         public Suit()
