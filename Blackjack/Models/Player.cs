@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Blackjack.Enums;
+using Blackjack.Helpers;
+using System.Collections.Generic;
 
 namespace Blackjack.Models
 {
@@ -30,11 +32,25 @@ namespace Blackjack.Models
             Bank = new Bank(amount);
             Hands = new List<Hand>() { new Hand() };
         }
-
         public void PlaceBet(Hand hand, int amount)
         {
             Bank.Withdraw(amount);
             hand.Wager = amount;
+        }
+
+        internal void TakeTurn()
+        {
+            foreach (var hand in Hands)
+            {
+                if (!hand.HasPlayed)
+                {
+                    Display.TurnOptions();
+                    var decision = Display.GetTurnDecision();
+                    hand.HasPlayed = true;
+                    Decision.Execute(decision);
+                    if (decision == TurnOptions.Split) { TakeTurn(); }
+                }
+            }
         }
     }
 }

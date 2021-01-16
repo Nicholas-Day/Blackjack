@@ -9,6 +9,7 @@ namespace Blackjack.Models
         public List<Card> Cards { get; set; }
         public int Wager { get; set; }
         public int Value { get => GetValue(); }
+        public bool HasPlayed { get; set; }
 
         public Hand()
         {

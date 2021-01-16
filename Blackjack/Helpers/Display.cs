@@ -15,21 +15,32 @@ namespace Blackjack.Helpers
             }
             if (player.Bank.Balance == 0)
             {
-                player.Bank.Deposit(GetBuyIn("Amount to buy back in for: "));
+                player.Bank.Deposit(depositAmount: GetBuyIn("Amount to buy back in for: "));
             }
 
         }
         private static bool WantToKeepPlaying()
         {
+            var inputIsValid = false;
             Console.Write("1. Yes\n2. No\nWould you like continue playing: ");
-            var response = Console.ReadLine();
-            if (!YesNoInputValue.ValidValues.Contains(response))
+            while (!inputIsValid)
             {
-                throw new InvalidInputException();
-            }
-            if (YesNoInputValue.Yes.Contains(response))
-            {
-                return true;
+                try
+                {
+                    var response = Console.ReadKey();
+                    if (!YesNoInputValue.ValidValues.Contains(response.KeyChar.ToString()))
+                    {
+                        throw new InvalidInputException();
+                    }
+                    inputIsValid = true;
+                    if (YesNoInputValue.Yes.Contains(response.KeyChar.ToString()))
+                    {
+                        return true;
+                    }
+                }
+                catch
+                {
+                }
             }
             return false;
         }

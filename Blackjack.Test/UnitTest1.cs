@@ -18,11 +18,11 @@ namespace Blackjack.Test
         public void GetHandValue_RangeOfHands_CorrectValues()
         {
             var hand1 = new Hand(AceOfDiamonds, AceOfSpades);
-            Assert.AreEqual(12, hand1.GetValue());
+            Assert.AreEqual(12, hand1.Value);
 
             var hand2 = new Hand(FiveOfHearts, SevenOfClubs);
             hand2.Cards.AddRange(hand1.Cards);
-            Assert.AreEqual(14, hand2.GetValue());
+            Assert.AreEqual(14, hand2.Value);
         }
         [TestMethod]
         public void BankDeposit_DefaultBankDeposit100_BalanceIs100()

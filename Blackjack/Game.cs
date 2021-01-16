@@ -47,15 +47,27 @@ namespace Blackjack
         private static void PlayRound()
         {
             Dealer.DealInitialCards();
+
+            if (Dealer.HasAceShowing())
+            {
+                OfferInsurance();
+                SettleInsuranceBets();
+            }
             if (ParticipantHasNatural())
             {
-
+                PayoutOnNaturals();
             }
-            foreach (var player in Players)
+            else
             {
-
+                Players.ForEach(player => player.TakeTurn());
             }
         }
+
+        private static void PayoutOnNaturals()
+        {
+            throw new NotImplementedException();
+        }
+
         private static bool ParticipantHasNatural()
         {
             foreach (var participant in Participants)

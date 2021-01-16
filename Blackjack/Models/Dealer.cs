@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Blackjack.Models
 {
@@ -15,6 +16,11 @@ namespace Blackjack.Models
             {
                 Game.Participants.ForEach(x => x.DrawCard());
             }
+        }
+
+        internal bool HasAceShowing()
+        {
+            throw new NotImplementedException();
         }
     }
 }
