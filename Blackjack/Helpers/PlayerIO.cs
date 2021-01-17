@@ -52,6 +52,10 @@ namespace Blackjack.Helpers
                 Console.WriteLine($"{option.Value}. {option.DisplayName}");
             }
         }
+        internal static TurnOptions GetTurnDecision()
+        {
+            throw new NotImplementedException();
+        }
         private static bool WantToKeepPlaying()
         {
             return YesNoDialog("Would you like continue playing: ");
@@ -59,10 +63,6 @@ namespace Blackjack.Helpers
         internal static bool GetInsuranceResponse()
         {
             return YesNoDialog("Would you like to place an insurance bet: ");
-        }
-        internal static TurnOptions GetTurnDecision()
-        {
-            throw new NotImplementedException();
         }
         internal static int GetBuyIn(string message)
         {
