@@ -16,7 +16,6 @@ namespace Blackjack
 
         private static void PrintCard(Card card)
         {
-            PlayerIO.TurnOptions();
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = card.Suit.Value.Color;
             Console.WriteLine(" ____ ");

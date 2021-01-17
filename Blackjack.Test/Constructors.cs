@@ -146,7 +146,7 @@ namespace Blackjack.Test
             }
             catch (Exception e)
             {
-                Assert.AreEqual("Cannot declare negative balance.", e.Message);
+                Assert.AreEqual("Cannot declare negative balance", e.Message);
             }
         }
         [TestMethod]

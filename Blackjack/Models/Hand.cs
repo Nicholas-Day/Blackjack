@@ -11,6 +11,21 @@ namespace Blackjack.Models
         public int Value { get => GetValue(); }
         public bool HasPlayed { get; set; }
         public bool HasAce { get => Cards.Any(card => card.Rank.Value == Ranks.Ace); }
+        public bool CanSplit { get => HasPair(); }
+
+        private bool HasPair()
+        {
+            if (Cards.Count != 2)
+            {
+                return false;
+            }
+            if (Cards[0].Value == Cards[1].Value)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public bool IsBust { get => IsHandBust();}
 
 

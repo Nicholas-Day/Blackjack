@@ -10,8 +10,8 @@ namespace Blackjack.Enums
         public static TurnOptions Hit = new TurnOptions(1, "Hit", false);
         public static TurnOptions Stand = new TurnOptions(2, "Stand", false);
         public static TurnOptions Surrender = new TurnOptions(3, "Surrender", false);
-        public static TurnOptions Split = new TurnOptions(4, "Split", true);
-        public static TurnOptions DoubleDown = new TurnOptions(5, "Double down", true);
+        public static TurnOptions DoubleDown = new TurnOptions(4, "Double down", true);
+        public static TurnOptions Split = new TurnOptions(5, "Split", true);
 
         public TurnOptions() { }
         private TurnOptions(int value, string displayName, bool isExclusiveToInitialHand) : base(value, displayName) { IsExclusiveToNewHands = isExclusiveToInitialHand; }

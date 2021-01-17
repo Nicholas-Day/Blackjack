@@ -1,6 +1,7 @@
 ﻿using Blackjack.Enums;
 using Blackjack.Models;
 using System;
+using System.Linq;
 
 namespace Blackjack.Helpers
 {
@@ -32,7 +33,7 @@ namespace Blackjack.Helpers
             }
             return false;
         }
-        internal static void AskToPlayAgain(Player player)
+        public static void AskToPlayAgain(Player player)
         {
             if (!WantToKeepPlaying())
             {
@@ -45,14 +46,23 @@ namespace Blackjack.Helpers
             }
 
         }
-        internal static void TurnOptions()
+        public static void TurnOptions(Hand hand)
         {
-            foreach (var option in Enums.TurnOptions.AllOptions)
+            var validOptions = Enums.TurnOptions.AllOptions;
+            if (!hand.CanSplit)
+            {
+                validOptions = validOptions.Where(option => option.Value != Enums.TurnOptions.Split.Value).ToList();
+            }
+            if (hand.Cards.Count > 2)
+            {
+                validOptions = validOptions.Where(option => option.IsExclusiveToNewHands != true).ToList();
+            }
+            foreach (var option in validOptions)
             {
                 Console.WriteLine($"{option.Value}. {option.DisplayName}");
             }
         }
-        internal static TurnOptions GetTurnDecision()
+        public static TurnOptions GetTurnDecision()
         {
             throw new NotImplementedException();
         }
@@ -60,31 +70,31 @@ namespace Blackjack.Helpers
         {
             return YesNoDialog("Would you like continue playing: ");
         }
-        internal static bool GetInsuranceResponse()
+        public static bool GetInsuranceResponse()
         {
             return YesNoDialog("Would you like to place an insurance bet: ");
         }
-        internal static int GetBuyIn(string message)
+        public static int GetBuyIn(string message)
         {
             Console.Write(message);
             // TODO: try/catch all int32.parse methods
             var buyInAmount = Int32.Parse(Console.ReadLine());
             return buyInAmount;
         }
-        internal static string PlayerName(int i)
+        public static string PlayerName(int i)
         {
             Console.Clear();
             Console.Write($"Enter name for player {i + 1}: ");
             var name = Console.ReadLine();
             return name;
         }
-        internal static int NumberOfPlayers()
+        public static int NumberOfPlayers()
         {
             Console.Write("Enter number of players: ");
             var playerCount = Int32.Parse(Console.ReadLine());
             return playerCount;
         }
-        internal static int HouseBank()
+        public static int HouseBank()
         {
             Console.Clear();
             Console.Write("Enter house bankroll: ");

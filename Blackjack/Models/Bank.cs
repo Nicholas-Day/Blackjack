@@ -25,13 +25,17 @@ namespace Blackjack.Models
         }
         public void Withdraw(int withdrawlAmount)
         {
+            if (withdrawlAmount < 0)
+            {
+                throw new NegativeWithdrawException();
+            }
             if (withdrawlAmount>Balance)
             {
                 throw new InsufficientFundsException();
             }
             Balance -= withdrawlAmount;
         }
-        public bool HasFunds(int amount)
+        public bool HasEnoughFunds(int amount)
         {
             if (amount > Balance)
             {

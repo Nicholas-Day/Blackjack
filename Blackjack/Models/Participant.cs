@@ -43,9 +43,9 @@ namespace Blackjack.Models
             {
                 if (!hand.HasPlayed)
                 {
-                    PlayerIO.TurnOptions();
+                    PlayerIO.TurnOptions(hand);
                     var decision = PlayerIO.GetTurnDecision();
-                    hand.HasPlayed = true;
+                    hand.HasPlayed = true; // TODO: this only allows a single decision to be made per turn
                     Decision.Execute(decision);
                     if (decision == TurnOptions.Split) { TakeTurn(); }
                 }

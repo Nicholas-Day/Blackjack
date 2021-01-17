@@ -46,7 +46,7 @@ namespace Blackjack
         {
             Dealer.DealInitialCards();
 
-            if (Dealer.HasAceShowing())
+            if (Dealer.HasAceShowing)
             {
                 OfferInsurance();
                 SettleInsuranceBets();

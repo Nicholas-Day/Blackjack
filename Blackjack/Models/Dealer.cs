@@ -12,6 +12,7 @@ namespace Blackjack.Models
 
         public Hand Hand { get => Hands[0]; }
         public bool HasSoft17 { get => Hands.Any(hand => hand.HasAce && hand.Value == 17); }
+        public bool HasAceShowing { get => AceShowing();}
 
         public void Initialize(int houseBank)
         {
@@ -25,7 +26,7 @@ namespace Blackjack.Models
                 Game.Participants.ForEach(x => x.DrawCard());
             }
         }
-        internal bool HasAceShowing()
+        private bool AceShowing()
         {
             if (Hand.Cards[0].Rank.Value == Ranks.Ace)
             {
@@ -67,7 +68,7 @@ namespace Blackjack.Models
                 Decision.Execute(TurnOptions.Hit);
             }
         }
-        internal void SettleBets()
+        public void SettleBets()
         {
             foreach (var player in Game.Players)
             {
