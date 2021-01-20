@@ -9,11 +9,11 @@ namespace Blackjack.Models
     {
         public const int _insurancePayoutRate = 2;
         public const int _drawPayoutRate = 1;
-        public const int _normalPayoutRate = 2; 
+        public const int _normalPayoutRate = 2;
 
-        public Hand Hand { get => Hands[0]; }
-        public bool HasSoft17 { get => Hands.Any(hand => hand.HasAce && hand.Value == 17); }
-        public bool HasAceShowing { get => AceShowing();}
+        public Hand Hand => Hands[0];
+        public bool HasSoft17 => Hands.Any(hand => hand.HasAce && hand.Value == 17);
+        public bool HasAceShowing => AceShowing();
 
         public Dealer()
         {
@@ -28,7 +28,7 @@ namespace Blackjack.Models
 
         public void DealInitialCards()
         {
-            for (int i = 0; i < 2; i++)
+            for (var i = 0; i < 2; i++)
             {
                 Game.Participants.ForEach(x => x.DrawCard());
             }
@@ -81,18 +81,6 @@ namespace Blackjack.Models
                 player.ClearAllWagers();
             }
         }
-        public override void TakeTurn()
-        {
-            var hit = new Hit();
-            if (HasSoft17)
-            {
-                hit.ExecuteOn(Hand);
-            }
-            while (Hand.Value < 17)
-            {
-                hit.ExecuteOn(Hand);
-            }
-        }
         public void SettleBets()
         {
             foreach (var player in Game.Players)
@@ -136,6 +124,22 @@ namespace Blackjack.Models
                 Bank.Deposit(hand.Wager);
             }
             hand.ClearWager();
+        }
+        public override void TakeTurn()
+        {
+            PlayHand(Hand);
+        }
+        protected override void PlayHand(Hand hand)
+        {
+            var hit = new Hit();
+            if (HasSoft17)
+            {
+                hit.ExecuteOn(Hand);
+            }
+            while (Hand.Value < 17)
+            {
+                hit.ExecuteOn(Hand);
+            }
         }
     }
 }

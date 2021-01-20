@@ -7,15 +7,15 @@ namespace Blackjack.Models
     public class Hand
     {
         public List<Card> Cards { get; set; }
-        public int Value { get => GetValue(); }
+        public int Value => GetValue();
         public int Wager { get; private set; }
-        public bool HasPlayed { get => HasHandBeenPlayed();}
-        public bool HasAce { get => Cards.Any(card => card.Rank.Value == Ranks.Ace); }
-        public bool CanSplit { get => HasPair(); }
-        public bool IsBust { get => IsHandBust();}
-        public bool IsBlackJack { get => Is21(); }
-        public bool Has5Cards { get => Cards.Count == 5;}
-        public bool IsNatural { get => IsHandNatural();}
+        public bool HasPlayed => HasHandBeenPlayed();
+        public bool HasAce => Cards.Any(card => card.Rank.Value == Ranks.Ace);
+        public bool CanSplit => HasPair();
+        public bool IsBust => IsHandBust();
+        public bool IsBlackJack => Is21();
+        public bool Has5Cards => Cards.Count == 5;
+        public bool IsNatural => IsHandNatural();
 
         public Hand()
         {
@@ -46,10 +46,7 @@ namespace Blackjack.Models
         private int GetValue()
         {
             var value = 0;
-            foreach (var card in Cards)
-            {
-                value = value + card.Value;
-            }
+            Cards.ForEach(card => value += card.Value);
             if (value > 21 && HasAce)
             {
                 var adjustedValue = value - ( 10 * (NumOfAces() - 1) ) > 21 ? value - (10 * NumOfAces())  : value - (10 * (NumOfAces() - 1));
@@ -87,11 +84,7 @@ namespace Blackjack.Models
             {
                 return false;
             }
-            if (Cards[0].Value == Cards[1].Value)
-            {
-                return true;
-            }
-            return false;
+            return Cards[0].Value == Cards[1].Value;
         }
         private bool HasHandBeenPlayed()
         {

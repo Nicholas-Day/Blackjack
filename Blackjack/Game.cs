@@ -108,7 +108,7 @@ namespace Blackjack
             {
                 var name = GetPlayerName(i);
                 var bankroll = GetPlayerBankroll(name);
-                Players.Add(new Player(name, bankroll));
+                Players.Add(new Player(bankroll, name));
             }
             Participants.AddRange(Players);
         }

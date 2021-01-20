@@ -1,14 +1,13 @@
 ﻿using Blackjack.Enums;
-using Blackjack.Interfaces;
 using Blackjack.Models;
 using System;
 using System.Linq;
 
-namespace Blackjack.Helpers
+namespace Blackjack.Interfaces
 {
-    public class PlayerIO : IPlayerIO
+    public interface IPlayerIO
     {
-        private static bool YesNoDialog(string message)
+        private bool YesNoDialog(string message)
         {
             Console.Clear();
             var inputIsValid = false;
@@ -34,7 +33,7 @@ namespace Blackjack.Helpers
             }
             return false;
         }
-        public static void AskToPlayAgain(Player player)
+        public void AskToPlayAgain(Player player)
         {
             if (!WantToKeepPlaying())
             {
@@ -47,7 +46,7 @@ namespace Blackjack.Helpers
             }
 
         }
-        public static void TurnOptions(Hand hand)
+        public void TurnOptions(Hand hand)
         {
             var validOptions = Enums.TurnOptions.AllOptions;
             if (!hand.CanSplit)
@@ -63,39 +62,39 @@ namespace Blackjack.Helpers
                 Console.WriteLine($"{option.Value}. {option.DisplayName}");
             }
         }
-        public static ITurnDecision GetTurnDecision()
+        public ITurnDecision GetTurnDecision()
         {
             throw new NotImplementedException();
         }
-        private static bool WantToKeepPlaying()
+        private bool WantToKeepPlaying()
         {
             return YesNoDialog("Would you like continue playing: ");
         }
-        public static bool GetInsuranceResponse()
+        public bool GetInsuranceResponse()
         {
             return YesNoDialog("Would you like to place an insurance bet: ");
         }
-        public static int GetBuyIn(string message)
+        public int GetBuyIn(string message)
         {
             Console.Write(message);
             // TODO: try/catch all int32.parse methods
             var buyInAmount = int.Parse(Console.ReadLine());
             return buyInAmount;
         }
-        public static string PlayerName(int i)
+        public string PlayerName(int i)
         {
             Console.Clear();
             Console.Write($"Enter name for player {i + 1}: ");
             var name = Console.ReadLine();
             return name;
         }
-        public static int NumberOfPlayers()
+        public int NumberOfPlayers()
         {
             Console.Write("Enter number of players: ");
             var playerCount = int.Parse(Console.ReadLine());
             return playerCount;
         }
-        public static int HouseBank()
+        public int HouseBank()
         {
             Console.Clear();
             Console.Write("Enter house bankroll: ");

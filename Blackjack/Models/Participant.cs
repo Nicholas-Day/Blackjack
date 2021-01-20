@@ -1,13 +1,12 @@
-﻿using Blackjack.Helpers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Blackjack.Models
 {
-    public class Participant
+    public abstract class Participant
     {
         public Bank Bank { get; set; }
         public List<Hand> Hands { get; set; }
-        public bool HasNatural { get => CheckForNatural();}
+        public bool HasNatural => CheckForNatural();
 
         public void DrawCard()
         {
@@ -23,34 +22,16 @@ namespace Blackjack.Models
         }
         public void Discard()
         {
-            foreach (var hand in Hands)
-            {
-                hand.Discard();
-            }
+            Hands.ForEach(hand => hand.Discard());
         }
         private bool CheckForNatural()
         {
-            if (Hands[0].Value == 21 && Hands[0].Cards.Count == 2)
-            {
-                return true;
-            }
-            return false;
+            return (Hands[0].Value == 21 && Hands[0].Cards.Count == 2);
         }
         public virtual void TakeTurn()
         {
-            foreach (var hand in Hands)
-            {
-                PlayHand(hand);
-            }
+            Hands.ForEach(hand => PlayHand(hand));
         }
-        private static void PlayHand(Hand hand)
-        {
-            while (!hand.HasPlayed)
-            {
-                PlayerIO.TurnOptions(hand);
-                var decision = PlayerIO.GetTurnDecision();
-                decision.ExecuteOn(hand);
-            }
-        }
+        protected abstract void PlayHand(Hand hand);
     }
 }

@@ -11,8 +11,8 @@ namespace Blackjack.Test
     [TestClass]
     public class Constructors
     {
-        Card AceOfDiamonds = new Card(Ranks.Ace, Suits.Diamonds);
-        Card AceOfSpades = new Card(Ranks.Ace, Suits.Spades);
+        readonly Card AceOfDiamonds = new Card(Ranks.Ace, Suits.Diamonds);
+        readonly Card AceOfSpades = new Card(Ranks.Ace, Suits.Spades);
 
         [TestMethod]
         public void RankConstructor_RandomRank_RankIsValid()
@@ -110,7 +110,7 @@ namespace Blackjack.Test
         [TestMethod]
         public void PlayerConstructor_NameBob_CorrectValues()
         {
-            var bob = new Player("Bob");
+            var bob = new Player(name: "Bob");
 
             Assert.AreEqual("Bob", bob.Name);
             Assert.AreEqual(0, bob.Bank.Balance);
@@ -118,7 +118,7 @@ namespace Blackjack.Test
         [TestMethod]
         public void PlayerConstructor_NameBobBank100_CorrectValues()
         {
-            var bob = new Player("Bob", 100);
+            var bob = new Player(100, "Bob");
 
             Assert.AreEqual("Bob", bob.Name);
             Assert.AreEqual(100, bob.Bank.Balance);

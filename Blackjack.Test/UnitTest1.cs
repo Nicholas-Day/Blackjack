@@ -1,8 +1,11 @@
 using Blackjack.Enums;
 using Blackjack.Exceptions;
 using Blackjack.Helpers;
+using Blackjack.Interfaces;
 using Blackjack.Models;
+using Blackjack.TurnDecisions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Collections.Generic;
 
@@ -600,6 +603,8 @@ namespace Blackjack.Test
         [TestMethod]
         public void Participant_DiscardHand()
         {
+            Deck.DiscardPile.Clear();
+            Game.Participants.Clear();
             var dealer = new Dealer();
             var player = new Player();
             Game.Participants.Add(dealer);
@@ -612,6 +617,18 @@ namespace Blackjack.Test
             Assert.AreEqual(0, player.Hands[0].Cards.Count);
             Assert.AreEqual(0, dealer.Hands[0].Cards.Count);
             Assert.AreEqual(4, Deck.DiscardPile.Count);
+        }
+
+        [TestMethod]
+        public void Player_PlayRound()
+        {
+            var playerIO = new Mock<IPlayerIO>();
+            playerIO.Setup(x => x.GetTurnDecision()).Returns(new Hit());
+            var player = new Player(playerIO.Object);
+
+            player.TakeTurn();
+
+            Assert.IsTrue(player.Hands[0].Cards.Count > 1);
         }
     }
 }

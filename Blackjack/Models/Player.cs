@@ -1,36 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using Blackjack.Helpers;
+using Blackjack.Interfaces;
+using System.Collections.Generic;
 
 namespace Blackjack.Models
 {
     public class Player : Participant
     {
+        private readonly IPlayerIO _playerIO = new PlayerIO();
+
         public string Name { get; set; }
-        public bool HasInsuranceBet { get => HasInsurance();}
+        public bool HasInsuranceBet => HasInsurance();
         public int InsuranceBet { get; private set; }
 
-        public Player()
-        {
-            Name = "Player";
-            Bank = new Bank();
-            Hands = new List<Hand>() { new Hand() };
-        }
-        public Player(int amount = 0)
-        {
-            Name = "Player";
-            Bank = new Bank(amount);
-            Hands = new List<Hand>(){ new Hand() };
-        }
-        public Player(string name = "Player")
-        {
-            Name = name;
-            Bank = new Bank();
-            Hands = new List<Hand>() { new Hand() };
-        }
-        public Player(string name, int amount)
+        public Player(int amount = 0, string name = "Player")
         {
             Name = name;
             Bank = new Bank(amount);
             Hands = new List<Hand>() { new Hand() };
+        }
+        public Player(IPlayerIO playerIO, int amount = 0, string name = "Player")
+        {
+            Name = name;
+            Bank = new Bank(amount);
+            Hands = new List<Hand>() { new Hand() };
+            _playerIO = playerIO;
         }
 
         private bool HasInsurance()
@@ -59,6 +52,15 @@ namespace Blackjack.Models
         internal void ClearAllWagers()
         {
             Hands.ForEach(hand => hand.ClearWager());
+        }
+        protected override void PlayHand(Hand hand)
+        {
+            while (!hand.HasPlayed)
+            {
+                _playerIO.TurnOptions(hand);
+                var decision = _playerIO.GetTurnDecision();
+                decision.ExecuteOn(hand);
+            }
         }
     }
 }
