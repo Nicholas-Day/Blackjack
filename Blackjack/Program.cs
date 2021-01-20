@@ -1,6 +1,5 @@
-﻿using Blackjack.Helpers;
-using Blackjack.Models;
-using System;
+﻿using System;
+using System.Text;
 
 namespace Blackjack
 {
@@ -10,19 +9,8 @@ namespace Blackjack
         {
             //Game.InitializeParticipants();
             //Game.Start();
-            var card = CardFactory.GenerateCard();
-            PrintCard(card);
-        }
-
-        private static void PrintCard(Card card)
-        {
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.ForegroundColor = card.Suit.Value.Color;
-            Console.WriteLine(" ____ ");
-            Console.WriteLine("|    |");
-            Console.WriteLine($"| {card.Rank.Value.DisplayName} |");
-            Console.WriteLine($"|  {card.Suit.Value.DisplayName} |");
-            Console.WriteLine("|____|");
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.WriteLine("\U0001F0A1");
         }
     }
 }

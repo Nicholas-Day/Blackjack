@@ -1,5 +1,4 @@
-﻿using Blackjack.Enums;
-using Blackjack.Helpers;
+﻿using Blackjack.Helpers;
 using System.Collections.Generic;
 
 namespace Blackjack.Models
@@ -12,17 +11,17 @@ namespace Blackjack.Models
 
         public void DrawCard()
         {
-            Hands[0].AddCard(Deck.Next());
+            Hands[0].AddCard(Deck.NextCard());
         }
         public void DrawCard(int hand)
         {
-            Hands[hand].AddCard(Deck.Next());
+            Hands[hand].AddCard(Deck.NextCard());
         }
         public void DrawCard(Hand hand)
         {
-            hand.AddCard(Deck.Next());
+            hand.AddCard(Deck.NextCard());
         }
-        internal void Discard()
+        public void Discard()
         {
             foreach (var hand in Hands)
             {
@@ -31,7 +30,7 @@ namespace Blackjack.Models
         }
         private bool CheckForNatural()
         {
-            if (Hands[0].Value == 21)
+            if (Hands[0].Value == 21 && Hands[0].Cards.Count == 2)
             {
                 return true;
             }
@@ -41,14 +40,16 @@ namespace Blackjack.Models
         {
             foreach (var hand in Hands)
             {
-                if (!hand.HasPlayed)
-                {
-                    PlayerIO.TurnOptions(hand);
-                    var decision = PlayerIO.GetTurnDecision();
-                    hand.HasPlayed = true; // TODO: this only allows a single decision to be made per turn
-                    Decision.Execute(decision);
-                    if (decision == TurnOptions.Split) { TakeTurn(); }
-                }
+                PlayHand(hand);
+            }
+        }
+        private static void PlayHand(Hand hand)
+        {
+            while (!hand.HasPlayed)
+            {
+                PlayerIO.TurnOptions(hand);
+                var decision = PlayerIO.GetTurnDecision();
+                decision.ExecuteOn(hand);
             }
         }
     }

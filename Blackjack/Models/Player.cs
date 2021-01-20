@@ -44,13 +44,21 @@ namespace Blackjack.Models
         public void PlaceBet(Hand hand, int amount)
         {
             Bank.Withdraw(amount);
-            hand.Wager = amount;
+            hand.PlaceWager(amount);
         }
         public void PlaceInsuranceBet()
         {
             var insuranceBet = Hands[0].Wager / 2;
             Bank.Withdraw(insuranceBet);
             InsuranceBet = insuranceBet;
+        }
+        internal void ClearInsuranceBet()
+        {
+            InsuranceBet = 0;
+        }
+        internal void ClearAllWagers()
+        {
+            Hands.ForEach(hand => hand.ClearWager());
         }
     }
 }

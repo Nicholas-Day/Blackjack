@@ -13,7 +13,7 @@ namespace Blackjack.Helpers
         {
             var numCards = numDecks * 52;
             var cards = new List<Card>();
-            for (int i = 0; i < numCards; i++)
+            for (var i = 0; i < numCards; i++)
             {
                 cards.Add(new Card(i));
             }

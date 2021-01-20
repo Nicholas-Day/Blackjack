@@ -21,6 +21,10 @@ namespace Blackjack.Models
 
         public void Deposit(int depositAmount)
         {
+            if (depositAmount < 0)
+            {
+                throw new NegativeDepositException();
+            }
             Balance += depositAmount;
         }
         public void Withdraw(int withdrawlAmount)

@@ -124,6 +124,34 @@ namespace Blackjack.Test
             Assert.AreEqual(100, bob.Bank.Balance);
         }
         [TestMethod]
+        public void DealerConstructor()
+        {
+            var dealer = new Dealer(10);
+
+            Assert.AreEqual(10, dealer.Bank.Balance);
+            Assert.AreEqual(1, dealer.Hands.Count);
+            Assert.AreEqual(0, dealer.Hands[0].Cards.Count);
+        }
+        [TestMethod]
+        public void DealerConstructor_NegativeBankroll_NegativeBalanceDeclarationExceptionThrown()
+        {
+            var wasExceptionThrown = false;
+
+            try
+            {
+                var dealer = new Dealer(-10);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Cannot declare negative balance", e.Message);
+                wasExceptionThrown = true;
+            }
+            finally
+            {
+                Assert.IsTrue(wasExceptionThrown);
+            }
+        }
+        [TestMethod]
         public void BankConstructor_DefaultBank_BalanceIs0()
         {
             var bank = new Bank();

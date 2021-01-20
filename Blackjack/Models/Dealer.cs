@@ -1,4 +1,5 @@
 ﻿using Blackjack.Enums;
+using Blackjack.TurnDecisions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,11 +15,17 @@ namespace Blackjack.Models
         public bool HasSoft17 { get => Hands.Any(hand => hand.HasAce && hand.Value == 17); }
         public bool HasAceShowing { get => AceShowing();}
 
-        public void Initialize(int houseBank)
+        public Dealer()
+        {
+            Bank = new Bank(0);
+            Hands = new List<Hand>() { new Hand() };
+        }
+        public Dealer(int houseBank)
         {
             Bank = new Bank(houseBank);
             Hands = new List<Hand>() { new Hand() };
         }
+
         public void DealInitialCards()
         {
             for (int i = 0; i < 2; i++)
@@ -34,14 +41,30 @@ namespace Blackjack.Models
             }
             return false;
         }
+        public void SettleInsuranceBets()
+        {
+            foreach (var player in Game.Players.Where(player => player.HasInsuranceBet))
+            {
+                if (HasNatural)
+                {
+                    PayoutInsurance(player);
+                }
+                else
+                {
+                    CollectInsurance(player);
+                }
+            }
+        }
         public void CollectInsurance(Player player)
         {
             Bank.Deposit(player.InsuranceBet);
+            player.ClearInsuranceBet();
         }
         public void PayoutInsurance(Player player)
         {
-            Bank.Withdraw(player.InsuranceBet * _insurancePayoutRate);
+            Bank.Withdraw(player.InsuranceBet);
             player.Bank.Deposit(player.InsuranceBet * _insurancePayoutRate);
+            player.ClearInsuranceBet();
         }
         public void SettleInCaseOfDealerNatural()
         {
@@ -55,17 +78,19 @@ namespace Blackjack.Models
                 {
                     Bank.Deposit(player.Hands[0].Wager);
                 }
+                player.ClearAllWagers();
             }
         }
         public override void TakeTurn()
         {
+            var hit = new Hit();
             if (HasSoft17)
             {
-                Decision.Execute(TurnOptions.Hit);
+                hit.ExecuteOn(Hand);
             }
             while (Hand.Value < 17)
             {
-                Decision.Execute(TurnOptions.Hit);
+                hit.ExecuteOn(Hand);
             }
         }
         public void SettleBets()
@@ -82,6 +107,7 @@ namespace Blackjack.Models
                 if (hand.IsBust)
                 {
                     Bank.Deposit(hand.Wager);
+                    hand.ClearWager();
                 }
                 else
                 {
@@ -94,19 +120,22 @@ namespace Blackjack.Models
             if (Hand.IsBust)
             {
                 player.Bank.Deposit(hand.Wager * _normalPayoutRate);
+                Bank.Withdraw(hand.Wager);
+            }
+            else if (hand.Value > Hand.Value)
+            {
+                player.Bank.Deposit(hand.Wager * _normalPayoutRate);
+                Bank.Withdraw(hand.Wager);
             }
             else if (hand.Value == Hand.Value)
             {
                 player.Bank.Deposit(hand.Wager * _drawPayoutRate);
             }
-            else if (hand.Value > Hand.Value)
-            {
-                player.Bank.Deposit(hand.Wager * _normalPayoutRate);
-            }
             else
             {
                 Bank.Deposit(hand.Wager);
             }
+            hand.ClearWager();
         }
     }
 }

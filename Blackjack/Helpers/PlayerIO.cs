@@ -1,4 +1,5 @@
 ﻿using Blackjack.Enums;
+using Blackjack.Interfaces;
 using Blackjack.Models;
 using System;
 using System.Linq;
@@ -62,7 +63,7 @@ namespace Blackjack.Helpers
                 Console.WriteLine($"{option.Value}. {option.DisplayName}");
             }
         }
-        public static TurnOptions GetTurnDecision()
+        public static ITurnDecision GetTurnDecision()
         {
             throw new NotImplementedException();
         }

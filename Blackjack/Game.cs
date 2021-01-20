@@ -9,9 +9,7 @@ namespace Blackjack
     {
         public static List<Participant> Participants { get; private set; } = new List<Participant>();
         public static List<Player> Players { get; private set; } = new List<Player>();
-
-
-        public static Dealer Dealer { get; private set; } = new Dealer();
+        public static Dealer Dealer { get; private set; }
 
         public static void Start()
         {
@@ -49,7 +47,7 @@ namespace Blackjack
             if (Dealer.HasAceShowing)
             {
                 OfferInsurance();
-                SettleInsuranceBets();
+                Dealer.SettleInsuranceBets();
             }
             if (ParticipantHasNatural())
             {
@@ -74,20 +72,7 @@ namespace Blackjack
                 }
             }
         }
-        private static void SettleInsuranceBets()
-        {
-            foreach (var player in Players.Where(player => player.HasInsuranceBet))
-            {
-                if (Dealer.HasNatural)
-                {
-                    Dealer.PayoutInsurance(player);
-                }
-                else
-                {
-                    Dealer.CollectInsurance(player);
-                }
-            }
-        }
+        
         private static bool ParticipantHasNatural()
         {
             foreach (var participant in Participants)
@@ -113,13 +98,13 @@ namespace Blackjack
 
         public static void InitializeParticipants()
         {
-            int playerCount = GetNumberOfPlayers();
+            var playerCount = GetNumberOfPlayers();
             InitializePlayers(playerCount);
             InitializeDealer();
         }
         private static void InitializePlayers(int playerCount)
         {
-            for (int i = 0; i < playerCount; i++)
+            for (var i = 0; i < playerCount; i++)
             {
                 var name = GetPlayerName(i);
                 var bankroll = GetPlayerBankroll(name);
@@ -144,7 +129,7 @@ namespace Blackjack
         private static void InitializeDealer()
         {
             var houseBank = GetHouseBank();
-            Dealer.Initialize(houseBank);
+            Dealer = new Dealer(houseBank);
             Participants.Add(Dealer);
         }
         private static int GetHouseBank()

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Blackjack.Interfaces;
+using Blackjack.TurnDecisions;
+using System.Collections.Generic;
 
 namespace Blackjack.Enums
 {
@@ -19,6 +21,16 @@ namespace Blackjack.Enums
         private static List<TurnOptions> GetAllOptions()
         {
             return new List<TurnOptions>() { Hit, Stand, Surrender, Split, DoubleDown };
+        }
+        public ITurnDecision Convert()
+        {
+            switch (DisplayName)
+            {
+                case "Hit":
+                    return (ITurnDecision)new Hit();
+                default:
+                    return (ITurnDecision)new Hit();
+            }
         }
     }
 }

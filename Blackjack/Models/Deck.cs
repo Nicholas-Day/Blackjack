@@ -7,12 +7,12 @@ namespace Blackjack.Models
 {
     public static class Deck
     {
-        private const int _numOfDecks = 4;
-        private static Random _random = new Random();
+        private const int _numOfDecks = 6;
+        private static readonly Random _random = new Random();
         public static List<Card> Cards { get; private set; } = CardFactory.GenerateDeckOfCards(_numOfDecks);
         public static List<Card> DiscardPile { get; set; } = new List<Card>();
 
-        public static Card Next()
+        public static Card NextCard()
         {
             var nextCard = Cards[0];
             Cards.Remove(nextCard);
@@ -20,11 +20,7 @@ namespace Blackjack.Models
         }
         public static bool CardsAreLow()
         {
-            if (Cards.Count < 40)
-            {
-                return true;
-            }
-            return false;
+            return Cards.Count < 40;
         }
         public static void Shuffle()
         {
