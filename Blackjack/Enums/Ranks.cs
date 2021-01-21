@@ -21,6 +21,6 @@
         public static readonly Ranks Unknown = new Ranks(13, "XX", 0);
 
         public Ranks() { }
-        private Ranks(int value, string displayName, int numericValue) : base(value, displayName) { NumericValue = numericValue; } 
+        private Ranks(int value, string displayName, int numericValue) : base(value, displayName) { NumericValue = numericValue; }
     }
 }

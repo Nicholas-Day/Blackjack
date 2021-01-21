@@ -72,7 +72,7 @@ namespace Blackjack
                 }
             }
         }
-        
+
         private static bool ParticipantHasNatural()
         {
             foreach (var participant in Participants)

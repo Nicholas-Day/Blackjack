@@ -7,7 +7,7 @@ namespace Blackjack.Enums
     public class TurnOptions : Enumeration
     {
         public readonly bool IsExclusiveToNewHands;
-        public static List<TurnOptions> AllOptions { get => GetAllOptions();}
+        public static List<TurnOptions> AllOptions => GetAllOptions();
 
         public static TurnOptions Hit = new TurnOptions(1, "Hit", false);
         public static TurnOptions Stand = new TurnOptions(2, "Stand", false);
@@ -27,9 +27,9 @@ namespace Blackjack.Enums
             switch (DisplayName)
             {
                 case "Hit":
-                    return (ITurnDecision)new Hit();
+                    return new Hit();
                 default:
-                    return (ITurnDecision)new Hit();
+                    return new Hit();
             }
         }
     }

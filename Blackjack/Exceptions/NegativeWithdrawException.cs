@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Blackjack.Exceptions
 {
     [Serializable]
-    internal class NegativeWithdrawException : Exception
+    internal class NegativeWithdrawException : ArgumentOutOfRangeException
     {
         public NegativeWithdrawException() : base("Cannot withdraw a negative amount") { }
         public NegativeWithdrawException(string message) : base(message) { }

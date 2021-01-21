@@ -6,6 +6,15 @@ namespace Blackjack.Models
 {
     public class Hand
     {
+        public Hand()
+        {
+            Cards = new List<Card>();
+        }
+        public Hand(Card card1, Card card2)
+        {
+            Cards = new List<Card>() { card1, card2 };
+        }
+
         public List<Card> Cards { get; set; }
         public int Value => GetValue();
         public int Wager { get; private set; }
@@ -16,15 +25,6 @@ namespace Blackjack.Models
         public bool IsBlackJack => Is21();
         public bool Has5Cards => Cards.Count == 5;
         public bool IsNatural => IsHandNatural();
-
-        public Hand()
-        {
-            Cards = new List<Card>();
-        }
-        public Hand(Card card1, Card card2)
-        {
-            Cards = new List<Card>() { card1, card2 };
-        }
 
         public void AddCard(Card card)
         {
@@ -49,7 +49,7 @@ namespace Blackjack.Models
             Cards.ForEach(card => value += card.Value);
             if (value > 21 && HasAce)
             {
-                var adjustedValue = value - ( 10 * (NumOfAces() - 1) ) > 21 ? value - (10 * NumOfAces())  : value - (10 * (NumOfAces() - 1));
+                var adjustedValue = value - (10 * (NumOfAces() - 1)) > 21 ? value - (10 * NumOfAces()) : value - (10 * (NumOfAces() - 1));
                 return adjustedValue;
             }
             return value;

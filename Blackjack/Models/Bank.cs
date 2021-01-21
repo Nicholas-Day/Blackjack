@@ -4,8 +4,6 @@ namespace Blackjack.Models
 {
     public class Bank
     {
-        public int Balance { get; private set; }
-
         public Bank()
         {
             Balance = 0;
@@ -18,6 +16,8 @@ namespace Blackjack.Models
             }
             Balance = balance;
         }
+
+        public int Balance { get; private set; }
 
         public void Deposit(int depositAmount)
         {
@@ -33,7 +33,7 @@ namespace Blackjack.Models
             {
                 throw new NegativeWithdrawException();
             }
-            if (withdrawlAmount>Balance)
+            if (withdrawlAmount > Balance)
             {
                 throw new InsufficientFundsException();
             }

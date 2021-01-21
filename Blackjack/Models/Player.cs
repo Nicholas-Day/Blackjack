@@ -8,10 +8,6 @@ namespace Blackjack.Models
     {
         private readonly IPlayerIO _playerIO = new PlayerIO();
 
-        public string Name { get; set; }
-        public bool HasInsuranceBet => HasInsurance();
-        public int InsuranceBet { get; private set; }
-
         public Player(int amount = 0, string name = "Player")
         {
             Name = name;
@@ -26,13 +22,13 @@ namespace Blackjack.Models
             _playerIO = playerIO;
         }
 
+        public string Name { get; private set; }
+        public bool HasInsuranceBet => HasInsurance();
+        public int InsuranceBet { get; private set; }
+
         private bool HasInsurance()
         {
-            if (InsuranceBet != 0)
-            {
-                return true;
-            }
-            return false;
+            return InsuranceBet != 0;
         }
         public void PlaceBet(Hand hand, int amount)
         {

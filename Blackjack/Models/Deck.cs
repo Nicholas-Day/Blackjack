@@ -9,6 +9,7 @@ namespace Blackjack.Models
     {
         private const int _numOfDecks = 6;
         private static readonly Random _random = new Random();
+
         public static List<Card> Cards { get; private set; } = CardFactory.GenerateDeckOfCards(_numOfDecks);
         public static List<Card> DiscardPile { get; set; } = new List<Card>();
 

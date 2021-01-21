@@ -11,10 +11,6 @@ namespace Blackjack.Models
         public const int _drawPayoutRate = 1;
         public const int _normalPayoutRate = 2;
 
-        public Hand Hand => Hands[0];
-        public bool HasSoft17 => Hands.Any(hand => hand.HasAce && hand.Value == 17);
-        public bool HasAceShowing => AceShowing();
-
         public Dealer()
         {
             Bank = new Bank(0);
@@ -25,6 +21,10 @@ namespace Blackjack.Models
             Bank = new Bank(houseBank);
             Hands = new List<Hand>() { new Hand() };
         }
+
+        public Hand Hand => Hands[0];
+        public bool HasSoft17 => Hands.Any(hand => hand.HasAce && hand.Value == 17);
+        public bool HasAceShowing => AceShowing();
 
         public void DealInitialCards()
         {
