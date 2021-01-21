@@ -1,6 +1,7 @@
 ﻿using Blackjack.Enums;
 using Blackjack.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Blackjack.Interfaces
@@ -46,26 +47,38 @@ namespace Blackjack.Interfaces
             }
 
         }
-        public void TurnOptions(Hand hand)
+        public ITurnDecision GetTurnDecision(List<TurnOptions> validOptions)
         {
-            var validOptions = Enums.TurnOptions.AllOptions;
-            if (!hand.CanSplit)
+            var chosenOption = GetPlayerDecision(validOptions);
+            if (chosenOption == null)
             {
-                validOptions = validOptions.Where(option => option.Value != Enums.TurnOptions.Split.Value).ToList();
+                throw new InvalidInputException("Invalid input, please try again");
             }
-            if (hand.Cards.Count > 2)
-            {
-                validOptions = validOptions.Where(option => option.IsExclusiveToNewHands != true).ToList();
-            }
+            return chosenOption.Convert();
+        }
+        private TurnOptions GetPlayerDecision(List<TurnOptions> validOptions)
+        {
+            Console.Clear();
+            DisplayOptions(validOptions);
+            return GetDecision(validOptions);
+        }
+        private TurnOptions GetDecision(List<TurnOptions> validOptions)
+        {
+            Console.Write("Enter your decision: ");
+            Console.ReadLine();
+            var decision = int.Parse(Console.ReadLine());
+            var validDecisions = validOptions.Select(option => option.Value);
+            var chosenOption = TurnOptions.AllTurnOptions.FirstOrDefault(option => option.Value == decision);
+            return chosenOption;
+        }
+        private void DisplayOptions(List<TurnOptions> validOptions)
+        {
             foreach (var option in validOptions)
             {
                 Console.WriteLine($"{option.Value}. {option.DisplayName}");
             }
         }
-        public ITurnDecision GetTurnDecision()
-        {
-            throw new NotImplementedException();
-        }
+
         private bool WantToKeepPlaying()
         {
             return YesNoDialog("Would you like continue playing: ");

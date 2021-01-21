@@ -623,7 +623,7 @@ namespace Blackjack.Test
         public void Player_PlayRound()
         {
             var playerIO = new Mock<IPlayerIO>();
-            playerIO.Setup(x => x.GetTurnDecision()).Returns(new Hit());
+            playerIO.Setup(x => x.GetTurnDecision(It.IsAny<List<TurnOptions>>())).Returns(new Hit());
             var player = new Player(playerIO.Object);
 
             player.TakeTurn();

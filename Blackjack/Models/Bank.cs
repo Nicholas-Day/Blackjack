@@ -41,11 +41,7 @@ namespace Blackjack.Models
         }
         public bool HasEnoughFunds(int amount)
         {
-            if (amount > Balance)
-            {
-                return false;
-            }
-            return true;
+            return amount <= Balance;
         }
     }
 }

@@ -1,13 +1,21 @@
 ﻿using Blackjack.Interfaces;
 using Blackjack.TurnDecisions;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Blackjack.Enums
 {
     public class TurnOptions : Enumeration
     {
         public readonly bool IsExclusiveToNewHands;
-        public static List<TurnOptions> AllOptions => GetAllOptions();
+        public static List<TurnOptions> AllTurnOptions => GetAllTurnOptions();
+        public string AllOptions => GetAllOptions();
+
+        private string GetAllOptions()
+        {
+            var temp = string.Join(',', AllTurnOptions.Select(x => x.DisplayName).ToArray());
+            return temp;
+        }
 
         public static TurnOptions Hit = new TurnOptions(1, "Hit", false);
         public static TurnOptions Stand = new TurnOptions(2, "Stand", false);
@@ -18,7 +26,7 @@ namespace Blackjack.Enums
         public TurnOptions() { }
         private TurnOptions(int value, string displayName, bool isExclusiveToInitialHand) : base(value, displayName) { IsExclusiveToNewHands = isExclusiveToInitialHand; }
 
-        private static List<TurnOptions> GetAllOptions()
+        private static List<TurnOptions> GetAllTurnOptions()
         {
             return new List<TurnOptions>() { Hit, Stand, Surrender, Split, DoubleDown };
         }

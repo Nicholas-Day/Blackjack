@@ -2,6 +2,7 @@
 using Blackjack.Interfaces;
 using Blackjack.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Blackjack.Helpers
@@ -47,25 +48,40 @@ namespace Blackjack.Helpers
             }
 
         }
-        public static void TurnOptions(Hand hand)
+        public static ITurnDecision GetTurnDecision(List<TurnOptions> validOptions)
         {
-            var validOptions = Enums.TurnOptions.AllOptions;
-            if (!hand.CanSplit)
+            var chosenOption = GetDecision(validOptions);
+            if (chosenOption == null)
             {
-                validOptions = validOptions.Where(option => option.Value != Enums.TurnOptions.Split.Value).ToList();
+                throw new InvalidInputException();
             }
-            if (hand.Cards.Count > 2)
-            {
-                validOptions = validOptions.Where(option => option.IsExclusiveToNewHands != true).ToList();
-            }
+            return chosenOption.Convert();
+        }
+        private static TurnOptions GetPlayerDecision(List<TurnOptions> validOptions)
+        {
+            Console.Clear();
+            DisplayOptions(validOptions);
+            return GetDecision(validOptions);
+        }
+        private static TurnOptions GetDecision(List<TurnOptions> validOptions)
+        {
+            Console.Write("Enter your decision: ");
+            Console.ReadLine();
+            var decision = Console.Read();
+            var validDecisions = validOptions.Select(option => option.Value);
+            var chosenOption = TurnOptions.AllTurnOptions.FirstOrDefault(option => option.Value == decision);
+            return chosenOption;
+        }
+        public static void InvalidInputTryAgain(InvalidInputException e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        private static void DisplayOptions(List<TurnOptions> validOptions)
+        {
             foreach (var option in validOptions)
             {
                 Console.WriteLine($"{option.Value}. {option.DisplayName}");
             }
-        }
-        public static ITurnDecision GetTurnDecision()
-        {
-            throw new NotImplementedException();
         }
         private static bool WantToKeepPlaying()
         {

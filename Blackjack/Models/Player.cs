@@ -1,6 +1,9 @@
-﻿using Blackjack.Helpers;
+﻿using Blackjack.Enums;
+using Blackjack.Helpers;
 using Blackjack.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Blackjack.Models
 {
@@ -49,14 +52,37 @@ namespace Blackjack.Models
         {
             Hands.ForEach(hand => hand.ClearWager());
         }
-        protected override void PlayHand(Hand hand)
+        protected async override void PlayHandAsync(Hand hand)
         {
+            ITurnDecision decision = null;
             while (!hand.HasPlayed)
             {
-                _playerIO.TurnOptions(hand);
-                var decision = _playerIO.GetTurnDecision();
-                decision.ExecuteOn(hand);
+                var validOptions = ValidTurnOptions(hand);
+                try
+                {
+                    decision = _playerIO.GetTurnDecision(validOptions);
+                }
+                catch (InvalidInputException ex)
+                {
+                    var pause = Task.Delay(3000);
+                    PlayerIO.InvalidInputTryAgain(ex);
+                    await pause;
+                }
+                if (decision != null) { decision.ExecuteOn(hand); }
             }
+        }
+        private List<TurnOptions> ValidTurnOptions(Hand hand)
+        {
+            var validOptions = TurnOptions.AllTurnOptions;
+            if (!hand.CanSplit)
+            {
+                validOptions = validOptions.Where(option => option.Value != TurnOptions.Split.Value).ToList();
+            }
+            if (hand.Cards.Count > 2)
+            {
+                validOptions = validOptions.Where(option => option.IsExclusiveToNewHands != true).ToList();
+            }
+            return validOptions;
         }
     }
 }

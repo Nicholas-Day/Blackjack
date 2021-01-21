@@ -29,6 +29,7 @@ namespace Blackjack
         }
         private static void AskPlayersForAnotherRound()
         {
+            // TODO: collection is modified bc ask to play again removes players if they quit
             foreach (var player in Players)
             {
                 PlayerIO.AskToPlayAgain(player);
@@ -37,7 +38,7 @@ namespace Blackjack
         internal static void CloseOutPlayer(Player player)
         {
             // TODO: return players remianing bankroll
-            Game.Players.Remove(player);
+            Players.Remove(player);
         }
 
         private static void PlayRound()

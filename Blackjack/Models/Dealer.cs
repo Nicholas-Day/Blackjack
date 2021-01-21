@@ -127,9 +127,9 @@ namespace Blackjack.Models
         }
         public override void TakeTurn()
         {
-            PlayHand(Hand);
+            PlayHandAsync(Hand);
         }
-        protected override void PlayHand(Hand hand)
+        protected override void PlayHandAsync(Hand hand)
         {
             var hit = new Hit();
             if (HasSoft17)

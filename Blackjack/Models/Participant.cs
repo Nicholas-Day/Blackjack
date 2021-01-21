@@ -30,8 +30,8 @@ namespace Blackjack.Models
         }
         public virtual void TakeTurn()
         {
-            Hands.ForEach(hand => PlayHand(hand));
+            Hands.ForEach(hand => PlayHandAsync(hand));
         }
-        protected abstract void PlayHand(Hand hand);
+        protected abstract void PlayHandAsync(Hand hand);
     }
 }
