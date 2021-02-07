@@ -72,7 +72,7 @@ namespace Blackjack.Helpers
             var chosenOption = TurnOptions.AllTurnOptions.FirstOrDefault(option => option.Value == decision);
             return chosenOption;
         }
-        public static void InvalidInputTryAgain(InvalidInputException e)
+        public static void InvalidInputTryAgain(Exception e)
         {
             Console.WriteLine(e.Message);
         }

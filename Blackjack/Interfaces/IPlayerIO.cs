@@ -64,9 +64,17 @@ namespace Blackjack.Interfaces
         }
         private TurnOptions GetDecision(List<TurnOptions> validOptions)
         {
+            int? decision = null;
             Console.Write("Enter your decision: ");
             Console.ReadLine();
-            var decision = int.Parse(Console.ReadLine());
+            try
+            {
+                decision = int.Parse(Console.ReadLine());
+            }
+            catch
+            {
+                throw;
+            }
             var validDecisions = validOptions.Select(option => option.Value);
             var chosenOption = TurnOptions.AllTurnOptions.FirstOrDefault(option => option.Value == decision);
             return chosenOption;

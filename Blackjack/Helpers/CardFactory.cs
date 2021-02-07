@@ -21,9 +21,12 @@ namespace Blackjack.Helpers
         }
         public static List<Card> Generate2CardHand()
         {
-            // TODO: make sure 2 cards are not the same
             var card1 = GenerateCard();
-            var card2 = GenerateCard();
+            var card2 = new Card();
+            do
+            {
+                card2 = GenerateCard();
+            } while (card1 == card2);
             return new List<Card>() { card1, card2 };
         }
         internal static Card GenerateCard()

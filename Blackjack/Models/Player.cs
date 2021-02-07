@@ -1,6 +1,7 @@
 ﻿using Blackjack.Enums;
 using Blackjack.Helpers;
 using Blackjack.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -62,7 +63,7 @@ namespace Blackjack.Models
                 {
                     decision = _playerIO.GetTurnDecision(validOptions);
                 }
-                catch (InvalidInputException ex)
+                catch (Exception ex)
                 {
                     var pause = Task.Delay(3000);
                     PlayerIO.InvalidInputTryAgain(ex);
