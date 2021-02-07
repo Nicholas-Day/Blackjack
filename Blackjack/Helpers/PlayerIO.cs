@@ -12,13 +12,13 @@ namespace Blackjack.Helpers
         private static bool YesNoDialog(string message)
         {
             Console.Clear();
-            var inputIsValid = false;
+            bool inputIsValid = false;
             Console.Write($"1. Yes\n2. No\n{message}");
             while (!inputIsValid)
             {
                 try
                 {
-                    var response = Console.ReadKey();
+                    ConsoleKeyInfo response = Console.ReadKey();
                     if (!YesNoInputValue.ValidValues.Contains(response.KeyChar.ToString()))
                     {
                         throw new InvalidInputException();
@@ -50,7 +50,7 @@ namespace Blackjack.Helpers
         }
         public static ITurnDecision GetTurnDecision(List<TurnOptions> validOptions)
         {
-            var chosenOption = GetDecision(validOptions);
+            TurnOptions chosenOption = GetDecision(validOptions);
             if (chosenOption == null)
             {
                 throw new InvalidInputException();
@@ -67,9 +67,9 @@ namespace Blackjack.Helpers
         {
             Console.Write("Enter your decision: ");
             Console.ReadLine();
-            var decision = Console.Read();
-            var validDecisions = validOptions.Select(option => option.Value);
-            var chosenOption = TurnOptions.AllTurnOptions.FirstOrDefault(option => option.Value == decision);
+            int decision = Console.Read();
+            IEnumerable<int> validDecisions = validOptions.Select(option => option.Value);
+            TurnOptions chosenOption = TurnOptions.AllTurnOptions.FirstOrDefault(option => option.Value == decision);
             return chosenOption;
         }
         public static void InvalidInputTryAgain(Exception e)
@@ -78,7 +78,7 @@ namespace Blackjack.Helpers
         }
         private static void DisplayOptions(List<TurnOptions> validOptions)
         {
-            foreach (var option in validOptions)
+            foreach (TurnOptions option in validOptions)
             {
                 Console.WriteLine($"{option.Value}. {option.DisplayName}");
             }
@@ -93,29 +93,51 @@ namespace Blackjack.Helpers
         }
         public static int GetBuyIn(string message)
         {
-            Console.Write(message);
             // TODO: try/catch all int32.parse methods
-            var buyInAmount = int.Parse(Console.ReadLine());
+            int buyInAmount = 0;
+            while (buyInAmount <= 0)
+            {
+                Console.Write(message);
+                try
+                {
+                    buyInAmount = int.Parse(Console.ReadLine());
+                }
+                catch (Exception e)
+                {
+                    InvalidInputTryAgain(e);
+                }
+            }
             return buyInAmount;
         }
         public static string PlayerName(int i)
         {
             Console.Clear();
             Console.Write($"Enter name for player {i + 1}: ");
-            var name = Console.ReadLine();
+            string name = Console.ReadLine();
             return name;
         }
         public static int NumberOfPlayers()
         {
             Console.Write("Enter number of players: ");
-            var playerCount = int.Parse(Console.ReadLine());
+            int playerCount = int.Parse(Console.ReadLine());
             return playerCount;
         }
         public static int HouseBank()
         {
             Console.Clear();
             Console.Write("Enter house bankroll: ");
-            var bankroll = Console.Read();
+            int bankroll = 0;
+            while (bankroll <= 0)
+            {
+                try
+                {
+                    bankroll = int.Parse(Console.ReadLine());
+                }
+                catch (Exception e)
+                {
+                    InvalidInputTryAgain(e);
+                }
+            }
             return bankroll;
         }
     }
